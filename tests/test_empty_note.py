@@ -1,37 +1,47 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 from config.environment import get_config
 from pages.login_page import LoginPage
 from pages.product_page import ProductPage
 
 
-def test_empty_note_validation(driver):
-    config = get_config()
-
-    driver.get(config["base_url"])
-    WebDriverWait(driver, config.get("timeout", 15)).until(
+def wait_for_page_load(driver, timeout):
+    WebDriverWait(driver, timeout).until(
         lambda d: d.execute_script("return document.readyState") == "complete"
     )
 
-    login = LoginPage(driver)
-    login.login(config["email"], config["password"])
 
-    notes = ProductPage(driver)
-    before_count = len(notes.get_all_notes())
+def login_to_application(driver, config):
+    driver.get(config["base_url"])
+    wait_for_page_load(driver, config.get("timeout", 15))
+    login_page = LoginPage(driver)
+    login_page.login(config["email"], config["password"])
 
-    notes.click(notes.ADD_NOTE)
+
+def test_empty_note_validation(driver):
+    config = get_config()
+
+    login_to_application(driver, config)
+
+    notes_page = ProductPage(driver)
+    initial_count = len(notes_page.get_all_notes())
+
+    notes_page.click(notes_page.ADD_NOTE)
+
     WebDriverWait(driver, config.get("timeout", 15)).until(
-        EC.visibility_of_element_located(notes.TITLE)
+        EC.visibility_of_element_located(notes_page.TITLE)
     )
 
-    notes.click(notes.SAVE)
+    notes_page.click(notes_page.SAVE)
 
     title_error = WebDriverWait(driver, config.get("timeout", 15)).until(
         EC.visibility_of_element_located(
             (By.XPATH, "//div[contains(@class,'invalid-feedback') and normalize-space(text())='Title is required']")
         )
     )
+
     desc_error = WebDriverWait(driver, config.get("timeout", 15)).until(
         EC.visibility_of_element_located(
             (By.XPATH, "//div[contains(@class,'invalid-feedback') and normalize-space(text())='Description is required']")
@@ -41,5 +51,5 @@ def test_empty_note_validation(driver):
     assert title_error.is_displayed()
     assert desc_error.is_displayed()
 
-    after_count = len(notes.get_all_notes())
-    assert after_count == before_count
+    final_count = len(notes_page.get_all_notes())
+    assert final_count == initial_count

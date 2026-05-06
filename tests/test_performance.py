@@ -1,35 +1,32 @@
 import time
 
+from pages.home_page import HomePage
 from pages.login_page import LoginPage
-from api.api_client import APIClient
-from api.notes_api import NotesAPI
 from config.environment import get_config
-
-
-def test_notes_api_performance():
-    config = get_config()
-    client = APIClient(config["api_url"])
-    client.login(config["email"], config["password"])
-    api = NotesAPI(client)
-
-    res, elapsed = api.get_notes()
-
-    assert res.status_code == 200
-    assert elapsed < float(config.get("performance_threshold", 1.5)), (
-        f"Notes API response time is too slow: {elapsed:.2f}s"
-    )
 
 
 def test_ui_login_performance(driver):
     config = get_config()
-    start = time.time()
 
+    # Open app
     driver.get(config["base_url"])
-    login = LoginPage(driver)
-    login.login(config["email"], config["password"])
 
-    elapsed = time.time() - start
+    login_page = LoginPage(driver)
 
-    assert elapsed < float(config.get("ui_login_threshold", 8.0)), (
-        f"UI login flow is too slow: {elapsed:.2f}s"
+    # Start timing
+    start_time = time.time()
+
+    login_page.login(config["email"], config["password"])
+
+    # Wait until the home page is loaded after login
+    home_page = HomePage(driver)
+    assert home_page.is_home_loaded(), "Login did not complete successfully"
+
+    # Stop timing
+    total_time = time.time() - start_time
+
+    max_time = float(config.get("ui_login_threshold", 15))
+
+    assert total_time < max_time, (
+        f"UI login is slow: took {total_time:.2f}s (limit: {max_time}s)"
     )

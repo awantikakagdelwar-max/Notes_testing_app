@@ -1,58 +1,73 @@
 import time
 
 from selenium.webdriver.support.ui import WebDriverWait
+
 from config.environment import get_config
 from pages.login_page import LoginPage
 from pages.product_page import ProductPage
 
 
-def test_delete_note_ui(driver):
-    config = get_config()
-
-    driver.get(config["base_url"])
-    WebDriverWait(driver, config.get("timeout", 15)).until(
+def wait_for_page_load(driver, timeout):
+    WebDriverWait(driver, timeout).until(
         lambda d: d.execute_script("return document.readyState") == "complete"
     )
 
-    login = LoginPage(driver)
-    login.login(config["email"], config["password"])
 
-    notes = ProductPage(driver)
-    initial_count = len(notes.get_all_notes())
+def login_to_application(driver, config):
+    driver.get(config["base_url"])
+    wait_for_page_load(driver, config.get("timeout", 15))
+
+    login_page = LoginPage(driver)
+    login_page.login(config["email"], config["password"])
+
+
+def test_delete_note_ui(driver):
+    config = get_config()
+
+    login_to_application(driver, config)
+
+    notes_page = ProductPage(driver)
+
+    initial_notes = notes_page.get_all_notes()
+    initial_count = len(initial_notes)
+
     assert initial_count > 0
 
-    # Delete the first note to verify delete-by-index functionality.
-    notes.delete_first_note()
+    notes_page.delete_first_note()
 
     WebDriverWait(driver, config.get("timeout", 15)).until(
-        lambda d: len(notes.get_all_notes()) == initial_count - 1
+        lambda d: len(notes_page.get_all_notes()) == initial_count - 1
     )
 
-    assert len(notes.get_all_notes()) == initial_count - 1
+    updated_count = len(notes_page.get_all_notes())
+    assert updated_count == initial_count - 1
 
 
 def test_delete_note_by_title_ui(driver):
     config = get_config()
 
-    driver.get(config["base_url"])
-    WebDriverWait(driver, config.get("timeout", 15)).until(
-        lambda d: d.execute_script("return document.readyState") == "complete"
+    login_to_application(driver, config)
+
+    notes_page = ProductPage(driver)
+
+    note_title = f"Delete Note {int(time.time())}"
+    note_content = "Temporary note for delete test"
+
+    notes_page.create_note(note_title, note_content)
+
+    notes_page.wait_for_note_presence(
+        note_title, timeout=config.get("timeout", 15)
     )
 
-    login = LoginPage(driver)
-    login.login(config["email"], config["password"])
+    notes_page.delete_note_by_title(note_title)
 
-    notes = ProductPage(driver)
-    target_title = f"Delete by title {int(time.time())}"
-    notes.create_note(target_title, "Temporary note for delete by title")
-
-    notes.wait_for_note_presence(target_title, timeout=config.get("timeout", 15))
-
-    notes.delete_note_by_title(target_title)
-
-    notes.wait_for_note_absence(target_title, timeout=config.get("timeout", 15))
-
-    assert not any(
-        note.find_element(*ProductPage.NOTE_TITLE).text.strip() == target_title
-        for note in notes.get_all_notes()
+    notes_page.wait_for_note_absence(
+        note_title, timeout=config.get("timeout", 15)
     )
+
+    remaining_titles = [
+        note.find_element(*ProductPage.NOTE_TITLE).text.strip()
+        for note in notes_page.get_all_notes()
+    ]
+
+    assert note_title not in remaining_titles

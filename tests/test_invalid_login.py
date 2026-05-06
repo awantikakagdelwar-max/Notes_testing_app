@@ -7,25 +7,42 @@ from pages.home_page import HomePage
 from pages.login_page import LoginPage
 
 
-def test_invalid_login(driver):
+def page_is_loaded(driver):
+    return driver.execute_script("return document.readyState") == "complete"
+
+
+def wait_for_page_ready(driver, timeout):
+    WebDriverWait(driver, timeout).until(page_is_loaded)
+
+
+invalid_credentials = [
+    ("invalid.user@example.com", "WrongPassword123!"),
+    ("", "ValidPassword123!"),
+    ("valid.user@example.com", ""),
+    ("invalid@", "short"),
+    
+]
+
+
+@pytest.mark.parametrize("email,password", invalid_credentials)
+def test_invalid_login(driver, email, password):
     config = get_config()
 
     driver.get(config["base_url"])
-    WebDriverWait(driver, config.get("timeout", 15)).until(
-        lambda d: d.execute_script("return document.readyState") == "complete"
-    )
+    wait_for_page_ready(driver, config.get("timeout", 15))
 
-    login = LoginPage(driver)
-    login.login("invalid.user@example.com", "WrongPassword123!")
+    login_page = LoginPage(driver)
+    login_page.login(email, password)
 
-    # The app should remain on the login page for invalid credentials
     assert "/login" in driver.current_url
 
-    # Verify the login form is still visible after the failed attempt
-    assert login.wait(login.EMAIL).is_displayed()
-    assert login.wait(login.PASSWORD).is_displayed()
+    email_visible = login_page.wait(login_page.EMAIL).is_displayed()
+    password_visible = login_page.wait(login_page.PASSWORD).is_displayed()
 
-    # Confirm home page did not load for invalid credentials
-    home = HomePage(driver)
+    assert email_visible
+    assert password_visible
+
+    home_page = HomePage(driver)
+
     with pytest.raises(TimeoutException):
-        home.is_home_loaded()
+        home_page.is_home_loaded()
