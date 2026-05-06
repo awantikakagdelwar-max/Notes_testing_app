@@ -1,11 +1,15 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
-               git 'https://github.com/awantikakagdelwar-max/Notes_testing_app.git'
+                git 'https://github.com/awantikakagdelwar-max/Notes_testing_app.git'
             }
         }
 
