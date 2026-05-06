@@ -1,15 +1,29 @@
 import allure
 import pytest
 from pathlib import Path
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import WebDriverException
 
-from fixtures.browser_fixture import driver
 from utils.screenshot import save_screenshot
+
+
+@pytest.fixture
+def driver():
+    options = Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+
+    driver = webdriver.Chrome(options=options)
+    yield driver
+    driver.quit()
 
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(item, call):
-
     outcome = yield
     report = outcome.get_result()
 
@@ -18,32 +32,30 @@ def pytest_runtest_makereport(item, call):
 
     driver = item.funcargs.get("driver")
 
-    if driver is None:
+    if not driver:
         return
 
     try:
-        # check browser still exists
-        driver.current_window_handle
+        driver.current_url
 
         report_dir = Path(item.config.rootpath)
         screenshot_path = save_screenshot(driver, item.name, report_dir)
 
         html_plugin = item.config.pluginmanager.getplugin("html")
 
-        if html_plugin is not None:
+        if html_plugin:
             extra = getattr(report, "extra", [])
             extra.append(html_plugin.extras.image(str(screenshot_path)))
             report.extra = extra
 
-        with open(screenshot_path, "rb") as image_file:
+        with open(screenshot_path, "rb") as f:
             allure.attach(
-                image_file.read(),
+                f.read(),
                 name="failure_screenshot",
                 attachment_type=allure.attachment_type.PNG
             )
 
     except WebDriverException:
-        # browser already closed
         pass
 
     except Exception:

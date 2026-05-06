@@ -6,4 +6,4 @@ services:
     container_name: notes_testing_container
     volumes:
       - .:/app
-    command: pytest -v --alluredir=allure-results
+    command: python3 -m pytest -n 1 --alluredir=allure-results
