@@ -71,3 +71,15 @@ def test_delete_note_by_title_ui(driver):
     ]
 
     assert note_title not in remaining_titles
+
+def delete_note_by_title(self, title):
+    notes = self.get_all_notes()
+
+    for note in notes:
+        note_title = note.find_element(*self.NOTE_TITLE).text.strip()
+        if note_title == title:
+            note.find_element(*self.DELETE_BUTTON).click()
+            break
+
+    time.sleep(1)
+    self.wait_for_note_absence(title, timeout=30)

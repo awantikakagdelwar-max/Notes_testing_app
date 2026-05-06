@@ -36,17 +36,16 @@ class ProductPage(BasePage):
             EC.presence_of_element_located(locator)
         )
 
-    def wait_for_note_absence(self, title, timeout=20):
-        locator = self.note_card_locator_for_title(title)
+    def wait_for_note_absence(self, title, timeout=15):
+        def is_note_removed(driver):
+            notes = self.get_all_notes()
+            titles = [
+                note.find_element(*self.NOTE_TITLE).text.strip()
+                for note in notes
+            ]
+            return title not in titles
 
-        def element_absent(driver):
-            try:
-                elems = driver.find_elements(*locator)
-                return len(elems) == 0 or all(not elem.is_displayed() for elem in elems)
-            except Exception:
-                return True
-
-        return WebDriverWait(self.driver, timeout).until(element_absent)
+        return WebDriverWait(self.driver, timeout).until(is_note_removed)
 
     def delete_note_by_index(self, index=0):
         notes = self.get_all_notes()
