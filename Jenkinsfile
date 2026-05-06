@@ -9,7 +9,8 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/awantikakagdelwar-max/Notes_testing_app.git'
+                git branch: 'main',
+                url: 'https://github.com/awantikakagdelwar-max/Notes_testing_app.git'
             }
         }
 
