@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  notes-testing:
+    build: .
+    container_name: notes_testing_container
+    volumes:
+      - .:/app
+    command: pytest -v --alluredir=allure-results
