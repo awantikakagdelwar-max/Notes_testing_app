@@ -1,0 +1,7 @@
+"base_url": "https://practice.expandtesting.com/notes/app"
+"api_url": "https://practice.expandtesting.com/notes/api"
+"email": "awantikakagdelwar@gmail.com"
+"password": "Test@1234"
+"timeout": 15
+"performance_threshold": 1.5
+"ui_login_threshold": 12.0

@@ -1,0 +1,2 @@
+LOGIN: {"success":true,"status":200,"message":"Login successful","data":{"id":"69f9e0ac81124e02985a71d9","name":"testselenium","email":"awantikakagdelwar@gmail.com","token":"7386bea1ad414b93967850919ef1c7d72613108ec8db4f77b0721cb4b8f73de5"}}
+CREATE NOTE: {"success":true,"status":200,"message":"Note successfully created","data":{"id":"69fae5e681124e02985ac8bb","title":"API E2E 1778050534","description":"Created through API","category":"Home","completed":false,"created_at":"2026-05-06T06:55:34.417Z","updated_at":"2026-05-06T06:55:34.417Z","user_id":"69f9e0ac81124e02985a71d9"}}
