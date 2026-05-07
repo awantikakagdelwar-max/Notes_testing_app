@@ -1,0 +1,6 @@
+Title: Delete Note 1778128727
+Description: Temporary note for delete test
+Category: Home
+Completed: False
+Created At: 2026-05-07T04:38:48.567Z
+Updated At: 2026-05-07T04:38:48.567Z

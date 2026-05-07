@@ -28,4 +28,4 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
     && rm -rf /var/lib/apt/lists/*
 
-CMD ["python3", "-m", "pytest", "-n", "1", "--alluredir=allure-results"]
+CMD ["python3", "-m", "pytest", "-n", "2", "--alluredir=allure-results"]

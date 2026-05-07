@@ -3,6 +3,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
 from config.environment import get_config
+from pages import login_page
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 
@@ -36,8 +37,17 @@ def test_invalid_login(driver, email, password):
 
     assert "/login" in driver.current_url
 
-    email_visible = login_page.wait(login_page.EMAIL).is_displayed()
-    password_visible = login_page.wait(login_page.PASSWORD).is_displayed()
+    email_visible = login_page.wait.until(
+        lambda d: login_page.get_element(
+            login_page.EMAIL
+        ).is_displayed()
+    )
+
+    password_visible = login_page.wait.until(
+        lambda d: login_page.get_element(
+            login_page.PASSWORD
+        ).is_displayed()
+    )
 
     assert email_visible
     assert password_visible

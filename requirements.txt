@@ -1,8 +1,9 @@
-selenium
+selenium==4.15.2
 pytest
 pytest-xdist
 pytest-html
 requests
-webdriver-manager
+webdriver-manager==4.0.1
 pyyaml
 allure-pytest
+pytest-rerunfailures

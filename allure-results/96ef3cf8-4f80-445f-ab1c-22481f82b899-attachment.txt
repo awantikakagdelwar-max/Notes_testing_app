@@ -1,0 +1,17 @@
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:124 Selenium Manager binary found at: /usr/local/lib/python3.11/site-packages/selenium/webdriver/common/linux/selenium-manager
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:139 Executing process: /usr/local/lib/python3.11/site-packages/selenium/webdriver/common/linux/selenium-manager --browser chrome --debug --language-binding python --output json
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 chromedriver not found in PATH
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 chrome detected at /usr/bin/google-chrome
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 Running command: /usr/bin/google-chrome --version
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 Output: "Google Chrome 148.0.7778.96 "
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 Detected browser: chrome 148.0.7778.96
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 Required driver: chromedriver 148.0.7778.97
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 chromedriver 148.0.7778.97 already in the cache
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 Driver path: /root/.cache/selenium/chromedriver/linux64/148.0.7778.97/chromedriver
+DEBUG    selenium.webdriver.common.selenium_manager:selenium_manager.py:165 Browser path: /usr/bin/google-chrome
+DEBUG    selenium.webdriver.common.service:service.py:234 Started executable: `/root/.cache/selenium/chromedriver/linux64/148.0.7778.97/chromedriver` in a child process with pid: 3106 using 0 to output -3
+DEBUG    selenium.webdriver.remote.remote_connection:remote_connection.py:406 POST http://localhost:46357/session {'capabilities': {'firstMatch': [{}], 'alwaysMatch': {'browserName': 'chrome', 'pageLoadStrategy': <PageLoadStrategy.normal: 'normal'>, 'browserVersion': None, 'goog:chromeOptions': {'extensions': [], 'binary': '/usr/bin/google-chrome', 'args': ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--window-size=1920,1080', '--remote-debugging-port=9222']}}}}
+DEBUG    urllib3.connectionpool:connectionpool.py:241 Starting new HTTP connection (1): localhost:46357
+DEBUG    urllib3.connectionpool:connectionpool.py:544 http://localhost:46357 "POST /session HTTP/1.1" 500 0
+DEBUG    selenium.webdriver.remote.remote_connection:remote_connection.py:439 Remote response: status=500 | data={"value":{"error":"session not created","message":"session not created\nfrom disconnected: unable to connect to renderer","stacktrace":"#0 0x5ab4966548aa \u003Cunknown>\n#1 0x5ab49604f8a9 \u003Cunknown>\n#2 0x5ab496093b09 \u003Cunknown>\n#3 0x5ab49608eaec \u003Cunknown>\n#4 0x5ab496088b29 \u003Cunknown>\n#5 0x5ab4960d8316 \u003Cunknown>\n#6 0x5ab4960d79fc \u003Cunknown>\n#7 0x5ab4960974cf \u003Cunknown>\n#8 0x5ab496098291 \u003Cunknown>\n#9 0x5ab49661a76b \u003Cunknown>\n#10 0x5ab49661d67d \u003Cunknown>\n#11 0x5ab4966076c8 \u003Cunknown>\n#12 0x5ab49661e210 \u003Cunknown>\n#13 0x5ab4965ee170 \u003Cunknown>\n#14 0x5ab4966417b8 \u003Cunknown>\n#15 0x5ab496641955 \u003Cunknown>\n#16 0x5ab49665330e \u003Cunknown>\n#17 0x7b4b3678fb7b \u003Cunknown>\n"}} | headers=HTTPHeaderDict({'Content-Length': '759', 'Content-Type': 'application/json; charset=utf-8', 'cache-control': 'no-cache'})
+DEBUG    selenium.webdriver.remote.remote_connection:remote_connection.py:468 Finished Request

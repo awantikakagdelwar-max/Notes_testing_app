@@ -1,0 +1,11 @@
+DEBUG    selenium.webdriver.remote.remote_connection:remote_connection.py:313 POST http://selenium-hub:4444/wd/hub/session {"capabilities": {"firstMatch": [{}], "alwaysMatch": {"browserName": "chrome", "pageLoadStrategy": "normal", "goog:chromeOptions": {"extensions": [], "args": ["--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--window-size=1920,1080", "--disable-extensions", "--disable-infobars"]}}}}
+DEBUG    urllib3.connectionpool:connectionpool.py:241 Starting new HTTP connection (1): selenium-hub:4444
+DEBUG    urllib3.util.retry:retry.py:545 Incremented Retry for (url='/wd/hub/session'): Retry(total=2, connect=None, read=None, redirect=None, status=None)
+WARNING  urllib3.connectionpool:connectionpool.py:869 Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='selenium-hub', port=4444): Failed to establish a new connection: [Errno 111] Connection refused")': /wd/hub/session
+DEBUG    urllib3.connectionpool:connectionpool.py:241 Starting new HTTP connection (2): selenium-hub:4444
+DEBUG    urllib3.util.retry:retry.py:545 Incremented Retry for (url='/wd/hub/session'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+WARNING  urllib3.connectionpool:connectionpool.py:869 Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='selenium-hub', port=4444): Failed to establish a new connection: [Errno 111] Connection refused")': /wd/hub/session
+DEBUG    urllib3.connectionpool:connectionpool.py:241 Starting new HTTP connection (3): selenium-hub:4444
+DEBUG    urllib3.util.retry:retry.py:545 Incremented Retry for (url='/wd/hub/session'): Retry(total=0, connect=None, read=None, redirect=None, status=None)
+WARNING  urllib3.connectionpool:connectionpool.py:869 Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='selenium-hub', port=4444): Failed to establish a new connection: [Errno 111] Connection refused")': /wd/hub/session
+DEBUG    urllib3.connectionpool:connectionpool.py:241 Starting new HTTP connection (4): selenium-hub:4444

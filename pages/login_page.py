@@ -6,9 +6,9 @@ from pages.base_page import BasePage
 
 class LoginPage(BasePage):
 
-    EMAIL = (By.ID, "email")
-    PASSWORD = (By.ID, "password")
-    LOGIN_BTN = (By.XPATH, "//button[text()='Login']")
+    EMAIL = (By.CSS_SELECTOR, "[data-testid='login-email']")
+    PASSWORD = (By.CSS_SELECTOR, "[data-testid='login-password']")
+    LOGIN_BTN = (By.CSS_SELECTOR, "[data-testid='login-submit']")
 
     def login(self, email, password):
         if '/login' not in self.driver.current_url:

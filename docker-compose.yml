@@ -1,9 +1,47 @@
-version: '3'
-
 services:
-  notes-testing:
+
+  selenium-hub:
+    image: selenium/hub:4.21.0
+    container_name: selenium-hub
+
+    ports:
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome:4.21.0
+
+    shm_size: 2gb
+
+    depends_on:
+      - selenium-hub
+
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+
+  tests:
+
     build: .
+
     container_name: notes_testing_container
+
+    depends_on:
+      - selenium-hub
+      - chrome
+
+    environment:
+      - SELENIUM_REMOTE_URL=http://selenium-hub:4444/wd/hub
+
     volumes:
       - .:/app
-    command: python3 -m pytest -n 1 --alluredir=allure-results
+
+    working_dir: /app
+
+    command: >
+      pytest -n 2 -v
+      --reruns 1
+      --alluredir=allure-results
+      --html=report.html
+      --self-contained-html

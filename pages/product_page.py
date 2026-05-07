@@ -67,7 +67,7 @@ class ProductPage(BasePage):
 
         delete_btn = notes[index].find_element(*self.NOTE_DELETE)
         self.driver.execute_script("arguments[0].click();", delete_btn)
-        self.wait(self.DELETE_CONFIRM)
+        self.wait.until(EC.element_to_be_clickable(self.DELETE_CONFIRM))
         self.click(self.DELETE_CONFIRM)
 
     def delete_note_by_title(self, title):
@@ -77,10 +77,7 @@ class ProductPage(BasePage):
         )
         delete_btn = note_card.find_element(*self.NOTE_DELETE)
         self.driver.execute_script("arguments[0].click();", delete_btn)
-        self.wait(self.DELETE_CONFIRM)
-        WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable(self.DELETE_CONFIRM)
-        )
+        self.wait.until(EC.element_to_be_clickable(self.DELETE_CONFIRM))
         self.click(self.DELETE_CONFIRM)
         self.wait_for_note_absence(title, timeout=30)
 
