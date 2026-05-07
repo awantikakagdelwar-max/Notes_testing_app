@@ -11,7 +11,8 @@ from utils.screenshot import save_screenshot
 @pytest.fixture
 def driver():
     options = Options()
-    options.add_argument("--headless=new")
+    # Remove headless mode so the browser opens visibly during test execution.
+    # options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")

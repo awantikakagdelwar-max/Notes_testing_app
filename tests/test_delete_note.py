@@ -27,21 +27,27 @@ def test_delete_note_ui(driver):
     login_to_application(driver, config)
 
     notes_page = ProductPage(driver)
+    note_title = f"Delete Test {int(time.time())}"
 
-    initial_notes = notes_page.get_all_notes()
-    initial_count = len(initial_notes)
+    notes_page.create_note(
+        note_title,
+        "Testing delete functionality"
+    )
 
-    assert initial_count > 0
+    notes_page.wait_for_note_presence(
+        note_title, timeout=config.get("timeout", 15)
+    )
 
-    notes_page.delete_first_note()
+    initial_count = len(notes_page.get_all_notes())
 
-    WebDriverWait(driver, config.get("timeout", 15)).until(
-        lambda d: len(notes_page.get_all_notes()) == initial_count - 1
+    notes_page.delete_note_by_title(note_title)
+    notes_page.wait_for_note_absence(
+        note_title, timeout=config.get("timeout", 15)
     )
 
     updated_count = len(notes_page.get_all_notes())
-    assert updated_count == initial_count - 1
 
+    assert updated_count == initial_count - 1
 
 def test_delete_note_by_title_ui(driver):
     config = get_config()
@@ -71,15 +77,3 @@ def test_delete_note_by_title_ui(driver):
     ]
 
     assert note_title not in remaining_titles
-
-def delete_note_by_title(self, title):
-    notes = self.get_all_notes()
-
-    for note in notes:
-        note_title = note.find_element(*self.NOTE_TITLE).text.strip()
-        if note_title == title:
-            note.find_element(*self.DELETE_BUTTON).click()
-            break
-
-    time.sleep(1)
-    self.wait_for_note_absence(title, timeout=30)

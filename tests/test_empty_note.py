@@ -26,6 +26,12 @@ def test_empty_note_validation(driver):
     login_to_application(driver, config)
 
     notes_page = ProductPage(driver)
+
+    # Wait until notes are loaded
+    WebDriverWait(driver, config.get("timeout", 15)).until(
+        lambda d: notes_page.get_all_notes() is not None
+    )
+
     initial_count = len(notes_page.get_all_notes())
 
     notes_page.click(notes_page.ADD_NOTE)
@@ -38,13 +44,19 @@ def test_empty_note_validation(driver):
 
     title_error = WebDriverWait(driver, config.get("timeout", 15)).until(
         EC.visibility_of_element_located(
-            (By.XPATH, "//div[contains(@class,'invalid-feedback') and normalize-space(text())='Title is required']")
+            (
+                By.XPATH,
+                "//div[contains(@class,'invalid-feedback') and normalize-space(text())='Title is required']"
+            )
         )
     )
 
     desc_error = WebDriverWait(driver, config.get("timeout", 15)).until(
         EC.visibility_of_element_located(
-            (By.XPATH, "//div[contains(@class,'invalid-feedback') and normalize-space(text())='Description is required']")
+            (
+                By.XPATH,
+                "//div[contains(@class,'invalid-feedback') and normalize-space(text())='Description is required']"
+            )
         )
     )
 
@@ -52,4 +64,5 @@ def test_empty_note_validation(driver):
     assert desc_error.is_displayed()
 
     final_count = len(notes_page.get_all_notes())
+
     assert final_count == initial_count

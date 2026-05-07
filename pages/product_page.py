@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from pages.base_page import BasePage
@@ -21,6 +22,9 @@ class ProductPage(BasePage):
         self.click(self.SAVE)
 
     def get_all_notes(self):
+        WebDriverWait(self.driver, 20).until(
+            EC.presence_of_element_located(self.NOTES)
+        )
         return self.driver.find_elements(*self.NOTES)
 
     def note_card_locator_for_title(self, title):
@@ -38,12 +42,21 @@ class ProductPage(BasePage):
 
     def wait_for_note_absence(self, title, timeout=15):
         def is_note_removed(driver):
-            notes = self.get_all_notes()
-            titles = [
-                note.find_element(*self.NOTE_TITLE).text.strip()
-                for note in notes
-            ]
-            return title not in titles
+            try:
+                notes = self.get_all_notes()
+            except StaleElementReferenceException:
+                return False
+
+            for note in notes:
+                try:
+                    note_title = note.find_element(*self.NOTE_TITLE).text.strip()
+                except (StaleElementReferenceException, NoSuchElementException):
+                    return False
+
+                if note_title == title:
+                    return False
+
+            return True
 
         return WebDriverWait(self.driver, timeout).until(is_note_removed)
 

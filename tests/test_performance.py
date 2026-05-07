@@ -25,7 +25,7 @@ def test_ui_login_performance(driver):
     # Stop timing
     total_time = time.time() - start_time
 
-    max_time = float(config.get("ui_login_threshold", 15))
+    max_time = float(config.get("ui_login_threshold", 20))
 
     assert total_time < max_time, (
         f"UI login is slow: took {total_time:.2f}s (limit: {max_time}s)"

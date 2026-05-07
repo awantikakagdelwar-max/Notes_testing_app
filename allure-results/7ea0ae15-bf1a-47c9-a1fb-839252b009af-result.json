@@ -1,0 +1,1 @@
+{"name": "test_delete_note_by_title_ui", "status": "passed", "start": 1778157993572, "stop": 1778158005885, "uuid": "59a1a746-5cb3-4e34-8082-09e0e12723ca", "testCaseId": "af66c0367ce9631430fe0060d157c15f", "fullName": "tests.test_delete_note#test_delete_note_by_title_ui", "titlePath": ["tests", "test_delete_note.py"]}
